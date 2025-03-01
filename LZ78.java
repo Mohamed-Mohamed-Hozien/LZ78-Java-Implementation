@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
+
 
 abstract class LZ78Compression {
     public abstract void compress(String inputFilePath, String outputFilePath) throws IOException;
@@ -17,24 +17,29 @@ abstract class LZ78Compression {
     public abstract String BinarizeTag(int pos, int bits, char nextChar);
 }
 
+
 class LZ78 extends LZ78Compression {
 
-    // Method to return the number of bits needed to code an integer number
     public int bitsNeeded(int number) {
+
         if (number == 0) {
-            return 1; // Special case for 0
+            return 1; // Base case for 0
         }
-        return (int) (Math.floor(Math.log(number) / Math.log(2))) + 1;
+
+        return (int) (Math.floor(Math.log(number) / Math.log(2))) + 1; // int(floor(log(number) / log(2) + 1))
     }
 
-    // Method to convert an integer to a binary string of a specified length
+    // integer to a binary string of a specified length
     public String toBinary(int number, int bits) {
+
         String binaryString = Integer.toBinaryString(number);
         int length = binaryString.length();
+
         if (length < bits) {
             // Pad with leading zeros
             binaryString = String.format("%" + bits + "s", binaryString).replace(' ', '0');
         }
+
         return binaryString;
     }
 
@@ -51,7 +56,7 @@ class LZ78 extends LZ78Compression {
         return binaryPos + binaryChar;
     }
 
-    // Method to compress a text file using LZ78 algorithm
+
     public void compress(String inputFilePath, String outputFilePath) throws IOException {
         String text = new String(Files.readAllBytes(Paths.get(inputFilePath)));
         if (text.isEmpty()) {
@@ -100,7 +105,7 @@ class LZ78 extends LZ78Compression {
         }
     }
 
-    // Method to decompress a binary file using LZ78 algorithm
+
     public void decompress(String inputFilePath, String outputFilePath) throws IOException {
         try (FileInputStream fis = new FileInputStream(inputFilePath)) {
             byte[] byteArray = fis.readAllBytes();
